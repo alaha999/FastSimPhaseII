@@ -2,12 +2,13 @@
 # using: 
 # Revision: 1.19 
 # Source: /local/reps/CMSSW/CMSSW/Configuration/Applications/python/ConfigBuilder.py,v 
-# with command line options: TTbar_14TeV_TuneCUETP8M1_cfi --conditions auto:phase2_realistic_T15 -n 2 --era Phase2 --eventcontent FEVTDEBUG --relval 9000,100 -s GEN,SIM --datatier GEN-SIM --beamspot HLLHC14TeV --geometry Extended2026D45 --no_exec
+# with command line options: TTbar_14TeV_TuneCUETP8M1_cfi --conditions auto:phase2_realistic_T15 -n 2 --era Phase2 --eventcontent FEVTDEBUG --relval 9000,100 -s GEN,SIM --datatier GEN-SIM --beamspot HLLHC14TeV --geometry Extended2026D45 --fast
 import FWCore.ParameterSet.Config as cms
 
 from Configuration.Eras.Era_Phase2_cff import Phase2
+from Configuration.Eras.Modifier_fastSim_cff import fastSim
 
-process = cms.Process('SIM',Phase2)
+process = cms.Process('SIM',Phase2,fastSim)
 
 # import of standard configurations
 process.load('Configuration.StandardSequences.Services_cff')
@@ -15,13 +16,12 @@ process.load('SimGeneral.HepPDTESSource.pythiapdt_cfi')
 process.load('FWCore.MessageService.MessageLogger_cfi')
 process.load('Configuration.EventContent.EventContent_cff')
 process.load('SimGeneral.MixingModule.mixNoPU_cfi')
-process.load('Configuration.Geometry.GeometryExtended2026D45Reco_cff')
-process.load('Configuration.Geometry.GeometryExtended2026D45_cff')
+process.load('FastSimulation.Configuration.Geometries_MC_cff')
 process.load('Configuration.StandardSequences.MagneticField_cff')
 process.load('Configuration.StandardSequences.Generator_cff')
 process.load('IOMC.EventVertexGenerators.VtxSmearedHLLHC14TeV_cfi')
 process.load('GeneratorInterface.Core.genFilterSummary_cff')
-process.load('Configuration.StandardSequences.SimIdeal_cff')
+process.load('FastSimulation.Configuration.SimIdeal_cff')
 process.load('Configuration.StandardSequences.EndOfProcess_cff')
 process.load('Configuration.StandardSequences.FrontierConditions_GlobalTag_cff')
 
