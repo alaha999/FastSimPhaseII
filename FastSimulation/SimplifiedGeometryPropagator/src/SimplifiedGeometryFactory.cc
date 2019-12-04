@@ -25,6 +25,8 @@ fastsim::SimplifiedGeometryFactory::SimplifiedGeometryFactory(
   barrelDetLayersMap_["BPix"] = &geometricSearchTracker_->pixelBarrelLayers();
   barrelDetLayersMap_["TIB"] = &geometricSearchTracker_->tibLayers();
   barrelDetLayersMap_["TOB"] = &geometricSearchTracker_->tobLayers();
+  std::cout<<"P2PXB size="<<geometricSearchTracker_->pixelBarrelLayers().size()<<std::endl;
+  std::cout<<"P2OTB size="<<geometricSearchTracker_->tobLayers().size()<<std::endl;
 
   // naming convention for forward DetLayer lists
   forwardDetLayersMap_["negFPix"] = &geometricSearchTracker_->negPixelForwardLayers();
@@ -33,6 +35,11 @@ fastsim::SimplifiedGeometryFactory::SimplifiedGeometryFactory(
   forwardDetLayersMap_["posTID"] = &geometricSearchTracker_->posTidLayers();
   forwardDetLayersMap_["negTEC"] = &geometricSearchTracker_->negTecLayers();
   forwardDetLayersMap_["posTEC"] = &geometricSearchTracker_->posTecLayers();
+
+  std::cout<<"P2PXEC size="<<geometricSearchTracker_->posPixelForwardLayers().size()<<std::endl;
+  std::cout<<"P2OTEC size="<<geometricSearchTracker_->posTidLayers().size()<<std::endl;
+
+
 }
 
 std::unique_ptr<fastsim::BarrelSimplifiedGeometry> fastsim::SimplifiedGeometryFactory::createBarrelSimplifiedGeometry(
@@ -95,8 +102,12 @@ std::unique_ptr<fastsim::SimplifiedGeometry> fastsim::SimplifiedGeometryFactory:
   else if (detLayer) {
     if (isForward) {
       position = static_cast<ForwardDetLayer const *>(detLayer)->surface().position().z();
+      std::cout<<"Forward Layer Z position="<<position<<std::endl;
+      
     } else {
       position = static_cast<BarrelDetLayer const *>(detLayer)->specificSurface().radius();
+      std::cout<<"Barrel Layer Radius="<<position<<std::endl;
+      
     }
   }
   // then throw error

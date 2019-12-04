@@ -14,4 +14,4 @@ from Configuration.Eras.Modifier_hcalHardcodeConditions_cff import hcalHardcodeC
 from Configuration.Eras.Modifier_phase2_timing_cff import phase2_timing
 from Configuration.Eras.Modifier_phase2_timing_layer_cff import phase2_timing_layer
 
-Phase2 = cms.ModifierChain(Run3.copyAndExclude([phase1Pixel,trackingPhase1]), phase2_common, phase2_tracker, trackingPhase2PU140, phase2_ecal, phase2_hcal, phase2_hgcal, phase2_muon, hcalHardcodeConditions, phase2_timing, phase2_timing_layer)
+Phase2 = cms.ModifierChain(Run3.copyAndExclude([phase1Pixel,trackingPhase1]), phase2_common)#, phase2_tracker, trackingPhase2PU140, phase2_ecal, phase2_hcal, phase2_hgcal, phase2_muon, hcalHardcodeConditions, phase2_timing, phase2_timing_layer)
