@@ -11,8 +11,8 @@ fastSimProducer = cms.EDProducer(
     src = cms.InputTag("generatorSmeared"),
     particleFilter =  ParticleFilterBlock.ParticleFilter,
     trackerDefinition = TrackerMaterialBlock.TrackerMaterial,
-    simulateCalorimetry = cms.bool(True),
-    simulateMuons = cms.bool(True),
+    simulateCalorimetry = cms.bool(False),
+    simulateMuons = cms.bool(False),
     caloDefinition = CaloMaterialBlock.CaloMaterial, #  Hack to interface "old" calorimetry with "new" propagation in tracker
     beamPipeRadius = cms.double(3.),
     deltaRchargedMother = cms.double(0.02), # Maximum angle to associate a charged daughter to a charged mother (mostly done to associate muons to decaying pions)
@@ -73,8 +73,8 @@ fastSimProducer = cms.EDProducer(
                 doHitsFromInboundParticles = cms.bool(False), # Track reconstruction not possible for those particles so hits do not have to be simulated
                 ),    
         ),
-    Calorimetry = FamosCalorimetryBlock.Calorimetry,
-    MaterialEffectsForMuonsInECAL = MaterialEffectsForMuonsInECALBlock.MaterialEffectsForMuonsInECAL,
-    MaterialEffectsForMuonsInHCAL = MaterialEffectsForMuonsInHCALBlock.MaterialEffectsForMuonsInHCAL,
-    GFlash = FamosCalorimetryBlock.GFlash,
+#    Calorimetry = FamosCalorimetryBlock.Calorimetry,
+#    MaterialEffectsForMuonsInECAL = MaterialEffectsForMuonsInECALBlock.MaterialEffectsForMuonsInECAL,
+#    MaterialEffectsForMuonsInHCAL = MaterialEffectsForMuonsInHCALBlock.MaterialEffectsForMuonsInHCAL,
+#    GFlash = FamosCalorimetryBlock.GFlash,
 )

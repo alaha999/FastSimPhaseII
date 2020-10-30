@@ -154,7 +154,7 @@ TrackCandidateProducer::produce(edm::Event& e, const edm::EventSetup& es) {
 
 	    // container for select hits
 	    std::vector<const FastTrackerRecHit *> selectedRecHits;
-
+	    std::cout<<"Track Candidate producer code is Running L157"<<std::endl;
 	    // add the seed hits
 	    TrajectorySeed::range seedHitRange = seed.recHits();//Hits in a seed
 	    for (TrajectorySeed::const_iterator ihit = seedHitRange.first; ihit != seedHitRange.second; ++ihit)

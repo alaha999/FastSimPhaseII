@@ -6,6 +6,14 @@
 #include "DataFormats/TrackReco/interface/Track.h"
 
 
+//Histograms
+#include "FWCore/ServiceRegistry/interface/Service.h"
+#include "CommonTools/UtilAlgos/interface/TFileService.h"
+#include "TH2.h"
+#include <TH1D.h>
+#include <TH2D.h>
+
+
 RecoTrackAccumulator::RecoTrackAccumulator(const edm::ParameterSet& conf, edm::ProducerBase& mixMod, edm::ConsumesCollector& iC) :
   signalTracksTag(conf.getParameter<edm::InputTag>("signalTracks")),
   pileUpTracksTag(conf.getParameter<edm::InputTag>("pileUpTracks")),
@@ -29,7 +37,7 @@ void RecoTrackAccumulator::initializeEvent(edm::Event const& e, edm::EventSetup 
   newTracks_ = std::unique_ptr<reco::TrackCollection>(new reco::TrackCollection);
   newHits_ = std::unique_ptr<TrackingRecHitCollection>(new TrackingRecHitCollection);
   newTrackExtras_ = std::unique_ptr<reco::TrackExtraCollection>(new reco::TrackExtraCollection);
-  
+  std::cout<<"recoAccuTrack code is working"<<std::endl;
   // this is needed to get the ProductId of the TrackExtra and TrackingRecHit and Track collections
   rNewTracks=const_cast<edm::Event&>( e ).getRefBeforePut<reco::TrackCollection>(outputLabel);
   rNewTrackExtras=const_cast<edm::Event&>( e ).getRefBeforePut<reco::TrackExtraCollection>(outputLabel);
@@ -62,6 +70,11 @@ template<class T> void RecoTrackAccumulator::accumulateEvent(const T& e, edm::Ev
   e.getByLabel(label, tracks);
   e.getByLabel(label, hits);
   e.getByLabel(label, trackExtras);
+
+  //Histograms Booking
+  //  edm::Service<TFileService> fs;
+  //recotracks= fs->make<TH1D>("Tracks size","No of tracks",100,0,100);
+
   
   if(! tracks.isValid())
   {
@@ -76,7 +89,10 @@ template<class T> void RecoTrackAccumulator::accumulateEvent(const T& e, edm::Ev
       throw cms::Exception ("RecoTrackAccumulator") << "Failed to find trackExtra collections with inputTag " << label << std::endl;
   }
   
+  //  std::cout<<"Tracks Size="<<tracks->size()<<std::endl;
   for (size_t t = 0; t < tracks->size();++t){
+    std::cout<<"RecoAccu Track Tracks Size="<<tracks->size()<<std::endl;
+    //recotracks->Fill(tracks->size());
     const reco::Track & track = (*tracks)[t];
     newTracks_->push_back(track);
     // track extras:

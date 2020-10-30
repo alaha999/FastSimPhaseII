@@ -36,7 +36,7 @@
 
 #include "DataFormats/TrackerRecHit2D/interface/FastSingleTrackerRecHit.h"
 #include "DataFormats/TrackerRecHit2D/interface/FastTrackerRecHitCollection.h"
-
+#include "DataFormats/TrackingRecHit/interface/InvalidTrackingRecHit.h"
 #include <map>
 #include <memory>
 #include <vector>
@@ -46,6 +46,7 @@ class TrackingRecHitProducer:
 {
     private:
         edm::EDGetTokenT<std::vector<PSimHit>> _simHitToken;
+        edm::EDGetTokenT<std::vector<TrackingRecHit>> _recHitToken;
         std::vector<TrackingRecHitAlgorithm*> _recHitAlgorithms;
         unsigned long long _trackerGeometryCacheID = 0;
         unsigned long long _trackerTopologyCacheID = 0;
@@ -93,6 +94,10 @@ TrackingRecHitProducer::TrackingRecHitProducer(const edm::ParameterSet& config)
 
     edm::InputTag simHitTag = config.getParameter<edm::InputTag>("simHits");
     _simHitToken = consumes<std::vector<PSimHit>>(simHitTag);
+
+    //    edm::InputTag recHitTag = config.getParameter<edm::InputTag>("recHits");
+    // _recHitToken = consumes<std::vector<TrackingRecHit>>(recHitTag);
+
 
     produces<FastTrackerRecHitCollection>();
     produces<FastTrackerRecHitRefCollection>("simHit2RecHitMap");
@@ -205,10 +210,11 @@ void TrackingRecHitProducer::produce(edm::Event& event, const edm::EventSetup& e
     //build DetId -> PSimHit map
     edm::Handle<std::vector<PSimHit>> simHits;
     event.getByToken(_simHitToken,simHits);
-
+    //edm::Handle<std::vector<TrackingRecHit>> recHits;
+    // event.getByToken(_recHitToken,recHits);
     std::unique_ptr<FastTrackerRecHitCollection> output_recHits(new FastTrackerRecHitCollection);
     output_recHits->reserve(simHits->size());
-
+    std::cout<<"recHit producer code is working"<<std::endl;
     edm::RefProd<FastTrackerRecHitCollection> output_recHits_refProd = event.getRefBeforePut<FastTrackerRecHitCollection>();
     std::unique_ptr<FastTrackerRecHitRefCollection> output_recHitRefs(new FastTrackerRecHitRefCollection(simHits->size(),FastTrackerRecHitRef()));
 
@@ -268,8 +274,12 @@ void TrackingRecHitProducer::produce(edm::Event& event, const edm::EventSetup& e
     for(unsigned recHitIndex = 0; recHitIndex < output_recHits->size(); ++recHitIndex)
     {
 	    ((FastSingleTrackerRecHit*)&(*output_recHits)[recHitIndex])->setId(recHitIndex);
-    }
+	    //	    const TrackingRecHit* rechit = &(*output_recHits)[recHitIndex];
+	    // std::cout<<"RecHitPosition="<<rechit->globalPosition()<<std::endl;
 
+    }
+    std::cout<<"RecHitSize="<<output_recHits->size()<<std::endl;
+    // std::cout<<"RecHitPosition="<<(*output_recHits[recHitIndex])->localPosition()<<std::endl;
     event.put(std::move(output_recHits));
     event.put(std::move(output_recHitRefs),"simHit2RecHitMap");
 

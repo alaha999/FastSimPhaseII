@@ -8,6 +8,11 @@
 #include "FWCore/Framework/interface/MakerMacros.h"
 #include "FWCore/ParameterSet/interface/ParameterSet.h"
 #include "FWCore/Framework/interface/ESHandle.h"
+#include "FWCore/ServiceRegistry/interface/Service.h"
+#include "CommonTools/UtilAlgos/interface/TFileService.h"
+#include "TH2.h"
+#include <TH1D.h>
+#include <TH2D.h>
 
 // fast tracker rechits
 #include "DataFormats/TrackerRecHit2D/interface/FastTrackerRecHit.h"
@@ -74,6 +79,7 @@ class FastTrackerRecHitMatcher : public edm::stream::EDProducer<>  {
     // ----------member data ---------------------------
     edm::EDGetTokenT<edm::PSimHitContainer> simHitsToken; 
     edm::EDGetTokenT<FastTrackerRecHitRefCollection> simHit2RecHitMapToken;
+    TH2D *trackerrecoXY;//,*PixelXYreco,*ECdiscreco;
 
 };
 
@@ -83,6 +89,12 @@ FastTrackerRecHitMatcher::FastTrackerRecHitMatcher(const edm::ParameterSet& iCon
     simHitsToken = consumes<edm::PSimHitContainer>(iConfig.getParameter<edm::InputTag>("simHits"));
     simHit2RecHitMapToken = consumes<FastTrackerRecHitRefCollection>(iConfig.getParameter<edm::InputTag>("simHit2RecHitMap"));
     
+
+    edm::Service<TFileService> fs;
+    trackerrecoXY= fs->make<TH2D>("rechits_rz","rz view of Phase 2 tracker",600,-300,300,600,-300,300);
+    //PixelXYreco= fs->make<TH2D>("Pixel_rz_reco","XY view of pixel layers",600,-300,300,600,-300,300);
+    // ECdiscreco=fs->make<TH2D>("ECDisk_rz_reco","Endcap disc",600,-300,300,600,-300,300);
+
     produces<FastTrackerRecHitCollection>();
     produces<FastTrackerRecHitRefCollection>("simHit2RecHitMap");
 }
@@ -130,7 +142,10 @@ void FastTrackerRecHitMatcher::produce(edm::Event& iEvent, const edm::EventSetup
 	// get subdetector id
 	DetId detid = recHit->geographicalId();
 	unsigned int subdet = detid.subdetId();
-	
+	//std::cout<<"RecHitPosition="<<recHit->globalPosition()<<std::endl;
+	for(unsigned recHitCounter = 0;recHitCounter < simHits->size();++recHitCounter){
+	  trackerrecoXY->Fill(recHit->globalPosition().z(),recHit->globalPosition().perp());
+	}
 	// treat pixel hits
 	if(subdet <= 2){ 
 	    (*output_simHit2RecHitMap)[simHitCounter] = recHitRef;
