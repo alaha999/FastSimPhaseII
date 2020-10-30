@@ -16,6 +16,9 @@
 <use   name="RecoTracker/TkHitPairs"/>
 <use   name="RecoPixelVertexing/PixelTriplets"/>
 <use   name="RecoTracker/MeasurementDet"/>
+<use   name="CommonTools/UtilAlgos"/>
+<use   name="PhysicsTools/UtilAlgos"/>
+
 <export>
   <lib   name="1"/>
 </export>

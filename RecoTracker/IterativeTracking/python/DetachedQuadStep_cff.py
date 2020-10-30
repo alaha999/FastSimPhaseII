@@ -335,5 +335,5 @@ fastSim.toReplaceWith(DetachedQuadStepTask,
                                ,detachedQuadStepSeeds
                                ,detachedQuadStepTrackCandidates
                                ,detachedQuadStepTracks
-                               ,detachedQuadStep
+                               ,detachedQuadStepSelector
                                ) )

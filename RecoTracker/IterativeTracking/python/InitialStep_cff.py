@@ -129,6 +129,24 @@ trackingPhase1.toModify(_fastSim_initialStepSeeds, seedFinderSelector = dict(
 )
 
 fastSim.toReplaceWith(initialStepSeeds,_fastSim_initialStepSeeds)
+#new for phase2
+trackingPhase2PU140.toModify(_fastSim_initialStepSeeds, seedFinderSelector = dict(
+        pixelTripletGeneratorFactory = None,
+        CAHitQuadrupletGeneratorFactory = _hitSetProducerToFactoryPSet(initialStepHitQuadruplets).clone(SeedComparitorPSet = dict(ComponentName = "none")),
+        #new parameters required for phase2 seeding
+        BPix = dict(
+            TTRHBuilder = 'WithoutRefit',
+            HitProducer = 'TrackingRecHitProducer',
+            ),
+        FPix = dict(
+            TTRHBuilder = 'WithoutRefit',
+            HitProducer = 'TrackingRecHitProducer',
+            ),
+        layerPairs = initialStepHitDoublets.layerPairs.value()
+        )
+)
+
+fastSim.toReplaceWith(initialStepSeeds,_fastSim_initialStepSeeds)
 
 
 # building
@@ -402,7 +420,10 @@ _InitialStepTask_fastSim = cms.Task(initialStepTrackingRegions
                            ,initialStepTrackCandidates
                            ,initialStepTracks
                            ,firstStepPrimaryVerticesBeforeMixing
+                           #,initialStepTrackRefsForJets
+                           #,firstStepPrimaryVertices
                            ,initialStepClassifier1,initialStepClassifier2,initialStepClassifier3
+                           #,initialStepSelector
                            ,initialStep
                            )
 fastSim.toReplaceWith(InitialStepTask, _InitialStepTask_fastSim)
